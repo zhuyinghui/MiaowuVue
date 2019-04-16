@@ -1,6 +1,5 @@
 <template>
   <div>
-    <head-nav></head-nav>
     <div class="variety">
       <div class="title">
         <h2>猫百科</h2>
@@ -43,35 +42,12 @@
     </div>
     <div class="content">
       <div class="title"><div></div><h2>{{catname}}</h2><div></div></div>
-      <ul class="introduce">
-        <li><img src="../../static/assets/images/cat3.jpg" alt=""> <h5>相册（5张照片）</h5></li>
-       <li><div>1</div><h3>俄罗斯蓝猫品种简介</h3></li>
-        <li>简介内容俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介
-          俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介
-          简介内容俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介
-          俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介
-          简介内容俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介
-          俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介
-          简介内容俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介
-          俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介
-          简介内容俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介
-          俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介</li>
-        <li><div>2</div><h3>俄罗斯蓝猫形态特征</h3></li>
-        <li>形态特征内容</li>
-        <li><div>3</div><h3>俄罗斯蓝猫性格特点</h3></li>
-        <li>特点内容</li>
-        <li><div>4</div><h3>俄罗斯蓝猫养护知识</h3></li>
-        <li>养护内容</li>
-        <li><div>5</div><h3>俄罗斯蓝猫喂食要点</h3></li>
-        <li>喂食内容</li>
-      </ul>
     </div>
   </div>
 </template>
 
 <script>
-  import goodsNav from '../components/goodsNav'
-  import HeadNav from "../components/headNav";
+  import goodsNav from './goodsNav'
   export default {
     name: 'cat',
     data() {
@@ -83,7 +59,6 @@
       }
     },
     components: {
-      HeadNav,
       goodsNav
     },
     methods: {
@@ -106,6 +81,9 @@
     computed: {
       classlist() {
         return this.$GoodsClass
+      },
+      goodslist() {
+        return this.$GoodsList
       },
       //体型和毛长的筛选
       afterselect() {
@@ -188,16 +166,35 @@
           })
         }
       },
+      //商品指定个别种类的筛选
+      goodsselect() {
+        if (this.catid === 0) {
+          return this.goodslist
+        } else {
+          return this.goodslist.filter((item) => {
+            return item.classid[0] === this.catid
+          })
+        }
+      },
+      //在goodsselect数组的基础上分页筛选
+      // pageselect() {
+      //   this.goodsselect.forEach((item, index) => {
+      //     this.$set(item, 'num', index)
+      //   });
+      //   return this.goodsselect.filter((item) => {
+      //     return item.num >= (this.currentpage - 1) * this.pagesize && item.num < this.currentpage * this.pagesize
+      //   })
+      // }
     },
 
   }
 </script>
 <style scoped>
-
+  /* line 10, ../sass/cat.scss */
   .variety {
     width: 100%;
   }
-
+  /* line 12, ../sass/cat.scss */
   .variety .title {
     width: 100%;
     height: 50px;
@@ -209,7 +206,7 @@
     padding: 0 30px;
     box-sizing: border-box;
   }
-
+  /* line 14, ../sass/cat.scss */
   .variety .title .filtrate {
     display: flex;
     justify-content: space-around;
@@ -218,11 +215,11 @@
     margin-left: -400px;
     padding-left: 170px;
   }
-
+  /* line 21, ../sass/cat.scss */
   .variety .title .close {
     cursor: pointer;
   }
-
+  /* line 25, ../sass/cat.scss */
   .variety .variety-items {
     width: 100%;
     padding-bottom: 10px;
@@ -234,7 +231,7 @@
     justify-content: flex-start;
     align-content: space-around;
   }
-
+  /* line 31, ../sass/cat.scss */
   .variety .variety-items .variety-item {
     display: flex;
     flex-direction: column;
@@ -245,7 +242,7 @@
     height: 70px;
     padding: 10px;
   }
-
+  /* line 36, ../sass/cat.scss */
   .variety .variety-items .variety-item img {
     height: 47px;
     width: 47px;
@@ -254,10 +251,13 @@
     cursor: pointer;
   }
 
+  /* line 45, ../sass/cat.scss */
   .content {
-
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
-
+  /* line 47, ../sass/cat.scss */
   .content .title {
     width: 100%;
     height: 50px;
@@ -270,33 +270,6 @@
     box-sizing: border-box;
     font-size: 13px;
   }
-  .content img{
-    height: 120px;width: 120px;
-    border: 5px solid white;
-  }
-  .introduce{
-    list-style: none;
-    position: relative;
-    width: 100%;
-    padding: 20px 0 0 200px;
-    box-sizing: border-box;
-  }
-  .introduce li{
-    display: flex;
-    margin: 15px 0;
-  }
-  .introduce li:nth-child(1){
-    display: flex;flex-direction: column;
-    position: absolute;left: 20px; top: 20px;
-  }
-  .introduce li div{
-    width: 25px;height: 25px;border-radius: 5px;
-    background: #cc0033;
-    color: white;
-    text-align: center;line-height:25px;
-    margin-right: 10px;
-  }
 
 </style>
-
 

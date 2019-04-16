@@ -17,10 +17,6 @@
       components:{
         headnav,
       },
-      mounted(){
-        console.log('ok')
-      }
-
     }
 </script>
 
