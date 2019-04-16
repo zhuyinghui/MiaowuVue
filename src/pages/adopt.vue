@@ -17,21 +17,24 @@
               :value="item.classid[0]">
             </el-option>
           </el-select>
-          <el-button type="primary" size="mini">发布</el-button>
+          <el-button type="primary" size="mini" @click="submit">发布</el-button>
         </li>
       </ul>
     </div>
     <div class="showinfo">
         <div class="title">
           <img src="../../static/assets/images/adopt.png">
-            <h4>猫咪领养</h4>
+            <h4>领养{{catname}}</h4>
         </div>
-      <ul class="oneclass" v-for="(item,index) in options">
-        <li><img :src="item.classimgs" alt="" /></li>
-        <li>最后发表时间：15分钟前</li>
-        <li>主题：3</li>
-        <li>{{item.classname[0]}}</li>
-      </ul>
+      <div v-if="ifshow" class="classes">
+        <ul class="oneclass" v-for="(item,index) in options" :key="index" @click="chooseClass(item.classid[0],item.classname[0])">
+          <li><img :src="item.classimgs" alt="" /></li>
+          <li>最后发表时间：15分钟前</li>
+          <li>主题：3</li>
+          <li>{{item.classname[0]}}</li>
+        </ul>
+      </div>
+      <div v-else>点击某一猫显示的内容<span @click="back">返回</span></div>
     </div>
 
   </div>
@@ -49,11 +52,53 @@
         return {
           options:this.$GoodsClass,
           value: '',
-          words:''
+          words:'',
+          ifshow:1,
+          catname:''
         };
       },
       methods: {
-
+        submit(){
+          let date=new Date();
+          let submitTime=date.getUTCFullYear()+'/'+(date.getUTCMonth()+1)+'/'+date.getUTCDate()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
+          if(this.value&&this.words){
+            this.axios.post(this.$domain+'/api/adoptInfo/',{
+              username:localStorage.getItem('name'),
+              classid:this.value,
+              words:this.words,
+              submitTime:submitTime
+            }).then(res=>{
+              console.log(res.data)
+            }).catch(err=>{
+              console.log(err)
+            });
+            this.$alert('领养信息发布成功！', '提示', {
+              confirmButtonText: '确定',
+              callback: () => {
+                this.words='';
+                this.value='';
+              }
+            });
+          }
+        },
+        chooseClass(classid,name){
+          console.log(classid);
+          this.catname=name;
+          this.ifshow=0;
+          this.axios.get(this.$domain+'/api/adoptInfo',{
+            params:{
+              classid
+            }
+          }).then(res=>{
+            console.log(res.data)
+          }).catch(err=>{
+            console.log(err)
+          })
+        },
+        back(){
+          this.ifshow=1;
+          this.catname=''
+        }
       },
       mounted(){
 console.log(this.options)
@@ -97,7 +142,7 @@ console.log(this.options)
 }
 .publish ul li div{
   margin: 0 15px 0 5px;
-  cursor: pointer;
+  /*cursor: pointer;*/
 }
 .publish ul li:last-child{
   position: absolute;right: 5px;
@@ -126,6 +171,9 @@ console.log(this.options)
   .title h4{
     margin: 5px;
 
+  }
+  .classes{
+    display: flex;flex-wrap: wrap;
   }
   .oneclass{
     list-style: none;

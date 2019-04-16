@@ -96,7 +96,6 @@
             break;
           }
         }
-        console.log(this.encyc.variaty)
       },
     },
     computed: {
@@ -188,13 +187,11 @@
     },
     mounted(){
       this.axios.get(this.$domain+'/api/encyclopediaInfo').then(res=>{
-        console.log(res.data)
         this.encyclist=res.data
       }).catch(err=>{
         console.log(err)
       })
     }
-
   }
 </script>
 <style scoped>
