@@ -42,28 +42,19 @@
       </transition>
     </div>
     <div class="content">
-      <div class="title"><div></div><h2>{{catname}}</h2><div></div></div>
+      <div class="title"><div></div><h2>{{catname}}{{catid}}</h2><div></div></div>
       <ul class="introduce">
         <li><img src="../../static/assets/images/cat3.jpg" alt=""> <h5>相册（5张照片）</h5></li>
-       <li><div>1</div><h3>俄罗斯蓝猫品种简介</h3></li>
-        <li>简介内容俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介
-          俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介
-          简介内容俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介
-          俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介
-          简介内容俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介
-          俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介
-          简介内容俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介
-          俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介
-          简介内容俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介
-          俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介俄罗斯蓝猫品种简介</li>
-        <li><div>2</div><h3>俄罗斯蓝猫形态特征</h3></li>
-        <li>形态特征内容</li>
-        <li><div>3</div><h3>俄罗斯蓝猫性格特点</h3></li>
-        <li>特点内容</li>
-        <li><div>4</div><h3>俄罗斯蓝猫养护知识</h3></li>
-        <li>养护内容</li>
-        <li><div>5</div><h3>俄罗斯蓝猫喂食要点</h3></li>
-        <li>喂食内容</li>
+       <li><div>1</div><h3>{{catname}}品种简介</h3></li>
+        <li><span v-html="encyc.variaty"></span></li>
+        <li><div>2</div><h3>{{catname}}形态特征</h3></li>
+        <li><span v-html="encyc.form"></span></li>
+        <li><div>3</div><h3>{{catname}}性格特点</h3></li>
+         <li><span v-html="encyc.character"></span></li>
+        <li><div>4</div><h3>{{catname}}养护知识</h3></li>
+         <li><span v-html="encyc.nurse"></span></li>
+        <li><div>5</div><h3>{{catname}}喂食要点</h3></li>
+         <li><span v-html="encyc.feed"></span></li>
       </ul>
     </div>
   </div>
@@ -80,6 +71,8 @@
         variety: true,
         ifchecked: '',
         catname: "猫百科", catid: 0,
+        encyclist:[],
+        encyc:{}
       }
     },
     components: {
@@ -97,10 +90,13 @@
             this.catid = item.classid[0];
           }
         });
-      },
-      showall() {
-        this.catid = 0;
-        this.catname = "全部";
+        for(let item of this.encyclist){
+          if(this.catid===item.classid){
+            this.encyc=item;
+            break;
+          }
+        }
+        console.log(this.encyc.variaty)
       },
     },
     computed: {
@@ -188,7 +184,16 @@
           })
         }
       },
+      
     },
+    mounted(){
+      this.axios.get(this.$domain+'/api/encyclopediaInfo').then(res=>{
+        console.log(res.data)
+        this.encyclist=res.data
+      }).catch(err=>{
+        console.log(err)
+      })
+    }
 
   }
 </script>
@@ -252,10 +257,6 @@
     border-radius: 50%;
     box-shadow: 3px 3px 5px #303030;
     cursor: pointer;
-  }
-
-  .content {
-
   }
 
   .content .title {
