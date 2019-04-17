@@ -56,6 +56,9 @@ const router = new Router({
       path:'/myEvaluate',component:()=>import('../pages/selfCenter/myEvaluate'),meta:{ requireAuth:true }
     },
     {
+      path:'/myAdopt',component:()=>import('../pages/selfCenter/myAdopt'),meta:{ requireAuth:true }
+    },
+    {
       path:'/logistics',component:()=>import('../pages/selfCenter/logistics'),meta:{ requireAuth:true }
     },
     {

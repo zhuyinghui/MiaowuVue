@@ -42,8 +42,8 @@
       </transition>
     </div>
     <div class="content">
-      <div class="title"><div></div><h2>{{catname}}{{catid}}</h2><div></div></div>
-      <ul class="introduce">
+      <div class="title"><div></div><h2>{{catname}}</h2><div></div></div>
+      <ul class="introduce" v-show="catid">
         <li><img src="../../static/assets/images/cat3.jpg" alt=""> <h5>相册（5张照片）</h5></li>
        <li><div>1</div><h3>{{catname}}品种简介</h3></li>
         <li><span v-html="encyc.variaty"></span></li>
@@ -70,7 +70,7 @@
         somatotype: '', furlength: '',
         variety: true,
         ifchecked: '',
-        catname: "猫百科", catid: 0,
+        catname: "请选择您要查询的品种猫", catid: 0,
         encyclist:[],
         encyc:{}
       }

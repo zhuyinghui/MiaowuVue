@@ -76,13 +76,20 @@
           return{
             search:'',
             minelist:[{
-              id:1,name:'个人资料',path:'/myInfomation' },{
-              id:2,name:'我的订单',path:'/myOrder' },{
-              id:3,name:'我的评价',path:'/myEvaluate' },
-              // {
-              // id:4,name:'后台管理',path:'' },
+              id:1,name:'个人资料',path:'/myInfomation' 
+              },
               {
-              id:5,name:'设置',path:''}],
+              id:2,name:'我的订单',path:'/myOrder' 
+              },
+              {
+              id:3,name:'我的评价',path:'/myEvaluate' 
+              },
+              {
+              id:4,name:'我的领养',path:'/myAdopt' 
+              },
+              {
+              id:5,name:'设置',path:''
+              }],
             username:'',
           }
       },

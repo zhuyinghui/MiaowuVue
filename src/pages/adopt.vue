@@ -28,17 +28,24 @@
         </div>
       <div v-if="ifshow" class="classes">
         <ul class="oneclass" v-for="(item,index) in options" :key="index" @click="chooseClass(item.classid[0],item.classname[0])">
-          <li><img :src="item.classimgs" alt="" /></li>
-          <li>最后发表时间：15分钟前</li>
-          <li>主题：3</li>
+          <li><img :src="item.classimgs" alt="领养猫图" /></li>
+          <li>最近：{{times[index]}}</li>
+          <li>主题：{{counts[index]}}</li>
           <li>{{item.classname[0]}}</li>
         </ul>
       </div>
-      <div v-else>点击某一猫显示的内容<span @click="back">返回</span></div>
+      <div v-else class="adoptInfo">
+        <span @click="back" class="back"><i class="el-icon-d-arrow-left"></i>返回</span><br/>
+        <div class="adoptItems">
+            <ul v-for="(item,index) in adoptlist" :key="index">
+              <li><h4>{{item.username}}:</h4></li>
+              <li>{{item.words}}</li>
+              <li>{{item.submitTime}}</li>
+            </ul>
+        </div>
+      </div>
     </div>
-
   </div>
-
 </template>
 
 <script>
@@ -54,7 +61,11 @@
           value: '',
           words:'',
           ifshow:1,
-          catname:''
+          catname:'',
+          adoptlist:[],
+          counts:[],
+          times:[]
+
         };
       },
       methods: {
@@ -77,12 +88,12 @@
               callback: () => {
                 this.words='';
                 this.value='';
+                this.get_counts_time();
               }
             });
           }
         },
         chooseClass(classid,name){
-          console.log(classid);
           this.catname=name;
           this.ifshow=0;
           this.axios.get(this.$domain+'/api/adoptInfo',{
@@ -90,7 +101,8 @@
               classid
             }
           }).then(res=>{
-            console.log(res.data)
+           //拿到类别id对应的领养信息
+            this.adoptlist=res.data
           }).catch(err=>{
             console.log(err)
           })
@@ -98,14 +110,22 @@
         back(){
           this.ifshow=1;
           this.catname=''
+        },
+        get_counts_time(){
+          //获取每个类别的领养信息数量，以及最后一条信息的时间
+          this.axios.get(this.$domain+'/api/adoptInfo/counts').then(res=>{
+            this.counts=res.data
+          })
+            this.axios.get(this.$domain+'/api/adoptInfo/times').then(res=>{
+            this.times=res.data
+          })
         }
       },
       mounted(){
-console.log(this.options)
+          this.get_counts_time()
       }
     }
 </script>
-
 <style scoped>
 .publish{
   width: 100%;
@@ -180,13 +200,15 @@ console.log(this.options)
     height: 80px;
     width: 260px;
     display: flex;
-    padding-left: 20px;
+    padding: 0 15px;
     flex-direction: column-reverse;flex-wrap: wrap;
-    align-items: flex-start;justify-content: center;
+    align-content: flex-start;justify-content: center;
     background: #fff;
   }
   .oneclass li{
     font-size: 13px;
+    padding: 0 10px;
+    box-sizing: border-box;
   }
   .oneclass img{
     width: 70px;height: 70px;
@@ -197,6 +219,34 @@ console.log(this.options)
     cursor: pointer;
     transform: translate(0,1px);
     transition: transform 0.2s;
-
+  }
+  .adoptInfo{
+    width: 100%;
+  }
+  .adoptInfo .back{
+    color: #cc0033;
+    cursor: pointer;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .adoptItems{
+    width: 100%
+  }
+  .adoptItems ul{
+    list-style: none;
+    width: 100%;
+    background: white;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ccc;
+  }
+  .adoptItems ul li{
+    padding-top:5px;
+    box-sizing: border-box;
+  }
+  .adoptItems ul li:nth-child(3){
+    color: #5e5e5e;
+    font-size: 14px;
+    text-align: right;
   }
 </style>
