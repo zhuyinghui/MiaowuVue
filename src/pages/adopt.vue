@@ -72,7 +72,8 @@
         submit(){
           let date=new Date();
           let submitTime=date.getUTCFullYear()+'/'+(date.getUTCMonth()+1)+'/'+date.getUTCDate()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
-          if(this.value&&this.words){
+          if(localStorage.getItem('name')){
+            if(this.value&&this.words){
             this.axios.post(this.$domain+'/api/adoptInfo/',{
               username:localStorage.getItem('name'),
               classid:this.value,
@@ -92,6 +93,16 @@
               }
             });
           }
+          }else{
+             this.$alert('请先登录！', '提示', {
+              confirmButtonText: '确定',
+              callback: () => {
+                this.words='';
+                this.value='';
+              }
+            });
+          }
+          
         },
         chooseClass(classid,name){
           this.catname=name;
